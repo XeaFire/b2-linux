@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  python:
+    image: appfunpython
+    environment:
+      - PORT=port
+      - IP=ip
+    ports:
+      - $CURRENT_PORT
+  db:
+    image: mysql
+    environment:
+      - DB_HOST=value
