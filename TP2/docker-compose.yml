@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=meow
+      - MYSQL_ROOT_HOST=%
+    volumes:
+      - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    healthcheck:
+      test: [ "CMD", "mysql -u root -proot -hlocalhost -P3306" ]
+      interval: 2s
+      timeout: 30s
+      retries: 20
+      start_period: 30s
+
+  python:
+    build: .
+    environment:
+      - PORT=13337
+      - IP=ip
+      - DB_HOST=db
+    ports:
+      - ${PORT:-13337}:13337
+    depends_on:
+      - db
+
+  PHPMyAdmin:
+    image: phpmyadmin
+    ports:
+      - 8080:80
